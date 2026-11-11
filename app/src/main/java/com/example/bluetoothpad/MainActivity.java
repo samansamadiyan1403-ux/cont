@@ -19,7 +19,7 @@ public class MainActivity extends Activity {
   adapter=((BluetoothManager)getSystemService(BLUETOOTH_SERVICE)).getAdapter();
   if(Build.VERSION.SDK_INT>=28 && adapter!=null) adapter.getProfileProxy(this,new BluetoothProfile.ServiceListener(){public void onServiceConnected(int p,BluetoothProfile x){hid=(BluetoothHidDevice)x; register();}public void onServiceDisconnected(int p){hid=null;}},BluetoothProfile.HID_DEVICE);
  }
- void register(){try{BluetoothHidDeviceAppSdpSettings s=new BluetoothHidDeviceAppSdpSettings("Bluetooth Pad","Touch gamepad","Codex",BluetoothHidDevice.SUBCLASS1_GAMEPAD,descriptor());hid.registerApp(s,null,null,getMainExecutor(),callback);}catch(Exception e){}}
+ void register(){try{BluetoothHidDeviceAppSdpSettings s=new BluetoothHidDeviceAppSdpSettings("Bluetooth Pad","Touch gamepad","Codex",0x04,descriptor());hid.registerApp(s,null,null,getMainExecutor(),callback);}catch(Exception e){}}
  byte[] descriptor(){return new byte[]{(byte)0x05,0x01,(byte)0x09,0x05,(byte)0xa1,0x01,(byte)0x85,0x01,(byte)0x05,0x09,0x19,0x01,0x29,0x10,0x15,0x00,0x25,0x01,(byte)0x95,0x10,0x75,0x01,(byte)0x81,0x02,(byte)0x05,0x01,(byte)0x09,0x39,0x15,0x00,0x25,0x07,0x35,0x00,0x46,0x3b,0x01,0x65,0x14,(byte)0x75,0x04,(byte)0x95,0x01,(byte)0x81,0x42,(byte)0x75,0x04,(byte)0x95,0x01,(byte)0x81,0x03,(byte)0x09,0x30,(byte)0x09,0x31,(byte)0x09,0x33,(byte)0x09,0x34,0x15,(byte)0x81,0x25,0x7f,0x75,0x08,(byte)0x95,0x04,(byte)0x81,0x02,(byte)0xc0};}
  void send(){if(hid!=null&&host!=null)try{byte[] b={(byte)report[0],(byte)(report[0]>>8),(byte)report[1],(byte)report[2],(byte)report[3],(byte)report[4],(byte)report[5],(byte)report[6],(byte)report[7]};hid.sendReport(host,1,b);}catch(Exception ignored){}}
  class PadView extends View{
